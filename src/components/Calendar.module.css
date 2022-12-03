@@ -1,0 +1,9 @@
+.calendar {
+    width: 80%;
+    max-width: 80rem;
+    height: 80%;
+     border-radius: 10px;
+      box-shadow: 0 0 10px hsl(0, 0%, 66%)
+    
+    
+}
