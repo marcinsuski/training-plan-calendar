@@ -1,9 +1,9 @@
-import React from 'react'
 import classes from './Calendar.module.css';
+import Card from '../UI/Card';
 
 const Calendar = () => {
   return (
-    <div className={classes.calendar}>Calendar</div>
+    <Card className={classes.calendar}>Calendar</Card>
   )
   
 }
