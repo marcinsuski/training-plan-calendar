@@ -1,5 +1,4 @@
 import "./App.css";
-import { Calendar, dateFnsLocalizer } from "react-big-calendar";
 import format from "date-fns/format";
 import parse from "date-fns/parse";
 import startOfWeek from "date-fns/startOfWeek";
@@ -8,82 +7,36 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import React, { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-
-const locales = {
-    "en-US": require("date-fns/locale/en-US"),
-};
-const localizer = dateFnsLocalizer({
-    format,
-    parse,
-    startOfWeek,
-    getDay,
-    locales,
-});
-
-const events = [
-    {
-        title: "Big Meeting",
-        allDay: true,
-        start: new Date(2023, 1, 2),
-        end: new Date(2023, 1, 2),
-    },
-    {
-        title: "Vacation",
-        allDay: true,
-        start: new Date(2023, 1, 1),
-        end: new Date(2023, 1, 1),
-    },
-    {
-        title: "Conference",
-        start: new Date(2023, 1, 5),
-        end: new Date(2023, 1, 5),
-    },
-];
+import FullCalendar from "@fullcalendar/react"; // must go before plugins
+import dayGridPlugin from "@fullcalendar/daygrid"; // a plugin!
+import Card from "./UI/Card";
+import NavBar from "./UI/NavBar";
 
 function App() {
-    const [newEvent, setNewEvent] = useState({ title: "", start: "", end: "" });
-    const [allEvents, setAllEvents] = useState(events);
-
-    const handleAddEvent = () => {
-        setAllEvents([...allEvents, newEvent]);
-    };
-
     return (
         <div className="App">
-            <h1>Calendar</h1>
-            <h2>Add New Event</h2>
-            <div style={{ width: "100%" }}>
-                <input
-                    type="text"
-                    placeholder="Add Title"
-                    style={{ width: "20%", marginRight: "10px" }}
-                    value={newEvent.title}
-                    onChange={(e) =>
-                        setNewEvent({ ...newEvent, title: e.target.value })
-                    }
-                />
-                <DatePicker
-                    placeholderText="Start Date"
-                    style={{ marginRight: "10px" }}
-                    selected={newEvent.start}
-                    onChange={(start) => setNewEvent({ ...newEvent, start })}
-                />
-                <DatePicker
-                    placeholderText="End Date"
-                    selected={newEvent.end}
-                    onChange={(end) => setNewEvent({ ...newEvent, end })}
-                />
-                <button style={{ marginTop: "10px" }} onClick={handleAddEvent}>
-                    Submit
-                </button>
-            </div>
-            <Calendar
-                localizer={localizer}
-                events={allEvents}
-                startAccessor="start"
-                endAccessor="end"
-                style={{ height: 600, width: "80%", margin: "50px" }}
-            />
+            <Card>
+            <NavBar />
+
+                <div
+                    style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "flex-start",
+                        width: "100%",
+                        margin: "1rem 0",
+                    }}
+                >
+                    <h1>Edytowanie kalendarza</h1>
+                    <h3>Użytkownik: Adrian Ścibor</h3>
+                </div>
+                <div className="callendar_container">
+                    <FullCalendar
+                        plugins={[dayGridPlugin]}
+                        initialView="dayGridMonth"
+                    />
+                </div>
+            </Card>
         </div>
     );
 }
