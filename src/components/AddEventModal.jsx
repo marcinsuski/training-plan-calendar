@@ -11,13 +11,34 @@ const AddEventModal = ({ isOpen, onClose, onEventAdded }) => {
     const onSubmit = (e) => {
         e.preventDefault();
 
+        
         onEventAdded({
             title,
-            start,
-            end,
+            start: e.startStr,
+            end: e.endStr,
+            allDay: e.allDay,
         });
         onClose();
     };
+
+    // const handleDateSelect = (selectInfo) => {
+    //     let title = prompt("Please enter a new title for your event");
+    //     let calendarApi = selectInfo.view.calendar;
+
+    //     calendarApi.unselect(); // clear date selection
+
+    //     if (title) {
+    //         calendarApi.addEvent({
+    //             id: createEventId(),
+    //             title,
+    //             start: selectInfo.startStr,
+    //             end: selectInfo.endStr,
+    //             allDay: selectInfo.allDay,
+    //         });
+    //     }
+    // };
+
+
 
     return (
         <Modal isOpen={isOpen} onRequestClose={onClose}>
@@ -27,7 +48,7 @@ const AddEventModal = ({ isOpen, onClose, onEventAdded }) => {
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                 ></input>
-                <div>
+                {/* <div>
                     <label>Start Date</label>
                     <Datetime
                         value={start}
@@ -40,7 +61,7 @@ const AddEventModal = ({ isOpen, onClose, onEventAdded }) => {
                         value={end}
                         onChange={(date) => setEnd(date)}
                     />
-                </div>
+                </div> */}
                 <button>Add event</button>
             </form>
         </Modal>
