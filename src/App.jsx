@@ -2,7 +2,7 @@ import "./App.css";
 import FullCalendar from "@fullcalendar/react"; // must go before plugins
 import dayGridPlugin from "@fullcalendar/daygrid"; // a plugin!
 import timeGridPlugin from "@fullcalendar/timegrid"; // a plugin!
-import interactionPlugin from '@fullcalendar/interaction'; // a plugin!
+import interactionPlugin from "@fullcalendar/interaction"; // a plugin!
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import React, { useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
@@ -22,31 +22,51 @@ function App() {
     const [modalOpen, setModalOpen] = useState(false);
     const [events, setEvents] = useState([]);
     const calendarRef = useRef(null);
+    const [title, setTitle] = useState("");
+    const [start, setStart] = useState("");
+    const [end, setEnd] = useState("");
+    const [allDay, setAllDay] = useState(true);
+    const [selectInfo, setSelectInfo] = useState({});
 
-    // const onEventAdded = (e) => {
-    //     let calendarApi = calendarRef.current.getApi();
-    //     calendarApi.addEvent({
-    //         start: moment(e.start).toDate(),
-    //         end: moment(e.end).toDate(),
-    //         title: e.title,
-    //     });
-    // };
+    const modalOpenHandler = (selectInfo) => {
+        setModalOpen(true);
+        setStart(selectInfo.startStr);
+        setEnd(selectInfo.endStr);
+        setAllDay(selectInfo.allDay);
+        setSelectInfo(selectInfo.view.calendar);
+        console.log(selectInfo.view.calendar);
+    };
 
-    // const handleEventAdd = async (data) => {
-    //     await axios.post("/api/v1/calendar/create-event", data.event);
-    // };
+    const onClose = () => {
+        setModalOpen(false);
+    };
 
-    // const handleDatesSet = async (data) => {
-    //     const response = await axios.get(
-    //         "api/v1/calendar/get-events?start=" +
-    //             moment(data.start).toISOString() +
-    //             "&end=" +
-    //             moment(data.end).toISOString()
-    //     );
-    //     setEvents(response.data);
-    // };
+    const onEventAdded = (e) => {
+        let calendarApi = calendarRef.current.getApi();
+
+        calendarApi.addEvent({
+            start: moment(e.start).toDate(),
+            end: moment(e.end).toDate(),
+            title: e.title,
+        });
+        onClose();
+    };
+
+    const handleDateSelect = () => {
+        let calendarApi = selectInfo;
+        calendarApi.unselect(); // clear date selection
+        calendarApi.addEvent({
+            id: createEventId(),
+            title: title,
+            start: start,
+            end: end,
+            allDay: allDay,
+        });
+        setModalOpen(false);
+    };
 
     const handleEventClick = (clickInfo) => {
+     
         if (
             window.confirm(
                 `Are you sure you want to delete the event '${clickInfo.event.title}'`
@@ -56,28 +76,11 @@ function App() {
         }
     };
 
-    const handleDateSelect = (selectInfo) => {
-        let title = prompt("Please enter a new title for your event");
-        let calendarApi = selectInfo.view.calendar;
-
-        calendarApi.unselect(); // clear date selection
-
-        if (title) {
-            calendarApi.addEvent({
-                id: createEventId(),
-                title,
-                start: selectInfo.startStr,
-                end: selectInfo.endStr,
-                allDay: selectInfo.allDay,
-            });
-        }
-    };
-
     function renderEventContent(eventInfo) {
         return (
             <>
                 <b>{eventInfo.timeText}</b>
-                <i>{eventInfo.event.title}</i>
+                <>{eventInfo.event.title}</>
             </>
         );
     }
@@ -86,7 +89,7 @@ function App() {
         <div className="App">
             <Card>
                 <NavBar />
-                <button onClick={() => setModalOpen(true)}>Add Event</button>
+                {/* <button onClick={() => setModalOpen(true)}>Add Event</button> */}
                 <div
                     style={{
                         display: "flex",
@@ -102,7 +105,11 @@ function App() {
                 <div className="callendar_container">
                     <FullCalendar
                         ref={calendarRef}
-                        plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+                        plugins={[
+                            dayGridPlugin,
+                            timeGridPlugin,
+                            interactionPlugin,
+                        ]}
                         headerToolbar={{
                             left: "dayGridMonth,timeGridWeek",
                             center: "title",
@@ -117,21 +124,27 @@ function App() {
                         weekNumbers={true}
                         initialEvents={INITIAL_EVENTS}
                         firstDay={1}
-                        select={handleDateSelect}
+                        select={modalOpenHandler}
+                        // select={handleDateSelect}
                         eventContent={renderEventContent}
                         eventClick={handleEventClick}
                         // eventsSet={handleEvents}
                         events={events}
+                        eventColor="#378006"
                         // eventAdd={(e) => handleEventAdd(e)}
                         // datesSet={(date) => handleDatesSet(date)}
                     />
                 </div>
             </Card>
-            {/* <AddEventModal
+
+            <AddEventModal
+                setTitle={setTitle}
                 isOpen={modalOpen}
-                onClose={() => setModalOpen(false)}
+                onClose={onClose}
+                onSubmit={handleDateSelect}
                 onEventAdded={(e) => onEventAdded(e)}
-            /> */}
+                handleDateSelect={handleDateSelect}
+            />
         </div>
     );
 }

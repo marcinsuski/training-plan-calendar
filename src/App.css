@@ -6,3 +6,23 @@
     flex-direction: column;
     align-items: center;
 }
+
+.fc .fc-event {
+    padding: 3px;
+    /* height: fit-content !important; */
+}
+
+.fc .fc-daygrid-day:hover {
+    background-color: rgba(188,232,241,.3);
+}
+
+.fc .fc-button-primary:not(:disabled).fc-button-active {
+    background-color: #1ef837;
+    color: red;
+}
+
+.fc .fc-prevMonth-button,
+.fc .fc-nextMonth-button {
+  font-size: 18px;
+}
+
