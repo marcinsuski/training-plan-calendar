@@ -15,6 +15,7 @@ import { useRef } from "react";
 import axios from "axios";
 import moment from "moment";
 import { INITIAL_EVENTS, createEventId } from "./event-utils";
+import { convertLength } from "@mui/material/styles/cssUtils";
 
 Modal.setAppElement("#root");
 
@@ -34,7 +35,6 @@ function App() {
         setEnd(selectInfo.endStr);
         setAllDay(selectInfo.allDay);
         setSelectInfo(selectInfo.view.calendar);
-        console.log(selectInfo.view.calendar);
     };
 
     const onClose = () => {
@@ -62,18 +62,22 @@ function App() {
             end: end,
             allDay: allDay,
         });
+
         setModalOpen(false);
     };
 
+
     const handleEventClick = (clickInfo) => {
-     
-        if (
-            window.confirm(
-                `Are you sure you want to delete the event '${clickInfo.event.title}'`
-            )
-        ) {
-            clickInfo.event.remove();
-        }
+        setTitle(clickInfo.event.title);
+        setEvents(clickInfo)
+        setModalOpen(true);
+        // if (
+        //     window.confirm(
+        //         `Are you sure you want to delete the event '${clickInfo.event.title}'`
+        //     )
+        // ) {
+        //     clickInfo.event.remove();
+        // }
     };
 
     function renderEventContent(eventInfo) {
@@ -84,6 +88,17 @@ function App() {
             </>
         );
     }
+
+    const deleteEventHandler = () => {
+        if (
+            window.confirm(
+                `Are you sure you want to delete the event '${title}'`
+            )
+        ) {
+       
+            events.event.remove();
+        }
+    };
 
     return (
         <div className="App">
@@ -138,6 +153,7 @@ function App() {
             </Card>
 
             <AddEventModal
+                onDelete={deleteEventHandler}
                 setTitle={setTitle}
                 isOpen={modalOpen}
                 onClose={onClose}

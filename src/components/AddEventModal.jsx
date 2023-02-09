@@ -5,7 +5,7 @@ import Datetime from "react-datetime";
 import { Box } from "@mui/system";
 import { Button, FormControl, TextareaAutosize, Typography } from "@mui/material";
 
-const AddEventModal = ({ isOpen, onClose, title, onSubmit, setTitle }) => {
+const AddEventModal = ({ isOpen, onClose, title, onSubmit, setTitle, onDelete }) => {
  
 
     return (
@@ -29,10 +29,6 @@ const AddEventModal = ({ isOpen, onClose, title, onSubmit, setTitle }) => {
                         maxWidth: "900px",
                         width: "90%",
                         height: "max-content",
-                        //   top: '40px',
-                        //   left: '40px',
-                        //   right: '40px',
-                        //   bottom: '40px',
                         border: "1px solid #ccc",
                         background: "#fff",
                         overflow: "auto",
@@ -82,7 +78,7 @@ const AddEventModal = ({ isOpen, onClose, title, onSubmit, setTitle }) => {
                             pt={2}
                             gap="1rem"
                         >
-                            <Button variant="outlined" color="error">
+                            <Button variant="outlined" color="error" onClick={onDelete}>
                                 Delete
                             </Button>
                             <Button variant="contained" color="primary"  onClick={onSubmit}>
